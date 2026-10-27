@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Práctica Interactiva: Progresiones Aritméticas en el Valle del Mantaro</title>
+    <style>
+        :root {
+            --primary-color: #1b5e20;
+            --primary-light: #4c8c4a;
+            --primary-dark: #003300;
+            --secondary-color: #d84315;
+            --accent-color: #f57f17;
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-color: #1a1a1a;
+            --text-muted: #4a4a4a;
+            --border-color: #cccccc;
+            --error-color: #c62828;
+            --error-bg: #ffebee;
+            --success-color: #2e7d32;
+            --success-bg: #e8f5e9;
+            --focus-outline: 3px solid #f57f17;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* HEADER & CURRICULAR INFO */
+        header {
+            background-color: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            font-size: 1.25rem;
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+        }
+
+        .meta-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            background-color: #f0f7f0;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .meta-info div {
+            font-weight: 600;
+        }
+
+        .curricular-accordion {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .accordion-btn {
+            width: 100%;
+            background: #e8f5e9;
+            color: var(--primary-dark);
+            border: none;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-btn:focus {
+            outline: var(--focus-outline);
+        }
+
+        .accordion-content {
+            padding: 10px;
+            display: none;
+            font-size: 0.8rem;
+            background-color: #fafafa;
+        }
+
+        .accordion-content.show {
+            display: block;
+        }
+
+        .accordion-content ul, .accordion-content ol {
+            padding-left: 18px;
+        }
+
+        .accordion-content li {
+            margin-bottom: 6px;
+        }
+
+        /* SCOREBOARD & BARS */
+        .scoreboard {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background-color: var(--primary-dark);
+            color: #ffffff;
+            padding: 12px 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .score-title {
+            font-size: 0.95rem;
+        }
+
+        .score-value {
+            font-size: 1.3rem;
+            color: #ffeb3b;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 10px;
+            border-radius: 5px;
+        }
+
+        .mode-banner {
+            background-color: #e0f2f1;
+            border: 2px solid #004d40;
+            color: #004d40;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+
+        .review-actions-top {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .quick-nav {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .quick-nav-btn {
+            background: #fff;
+            border: 1px solid #004d40;
+            color: #004d40;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .quick-nav-btn.active-q {
+            background: #004d40;
+            color: #fff;
+        }
+
+        /* EXERCISE CARDS */
+        .exercise-card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: none;
+        }
+
+        .exercise-card.active {
+            display: block;
+        }
+
+        .exercise-card.completed {
+            border-color: var(--success-color);
+        }
+
+        .exercise-card.failed-card {
+            border-color: var(--error-color);
+        }
+
+        .ex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .ex-title {
+            font-size: 1.05rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .ex-badge {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+
+        .context-box {
+            background-color: #fffde7;
+            border-left: 4px solid var(--accent-color);
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .instruction {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        /* INPUTS AND BUTTONS */
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 10px;
+            transition: background 0.2s;
+            touch-action: manipulation;
+        }
+
+        .btn:hover, .btn:focus {
+            background-color: var(--primary-dark);
+            outline: var(--focus-outline);
+        }
+
+        .btn:disabled {
+            background-color: #ccc !important;
+            color: #666 !important;
+            cursor: not-allowed;
+            border-color: #aaa !important;
+        }
+
+        .btn-secondary {
+            background-color: #616161;
+        }
+
+        .btn-secondary:hover {
+            background-color: #424242;
+        }
+
+        .btn-action {
+            background-color: #0288d1;
+        }
+        
+        .btn-action:hover {
+            background-color: #01579b;
+        }
+
+        .btn-restart {
+            background-color: #d84315;
+        }
+
+        .btn-restart:hover {
+            background-color: #bf360c;
+        }
+
+        .input-num {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .input-num:focus {
+            border-color: var(--primary-color);
+            outline: var(--focus-outline);
+        }
+
+        .input-num:disabled {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        /* EXERCISE 1: MULTIPLE CHOICE */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            background-color: #f5f5f5;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+        }
+
+        .option-btn:focus {
+            outline: var(--focus-outline);
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary-color);
+            background-color: #e8f5e9;
+            font-weight: bold;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* EXERCISE 3: REORDER STEPS */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 10px;
+            gap: 10px;
+        }
+
+        .step-item.error-step {
+            border-color: var(--error-color);
+            background-color: var(--error-bg);
+        }
+
+        .step-text {
+            flex-grow: 1;
+            font-size: 0.88rem;
+        }
+
+        .step-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .btn-step {
+            background-color: #e0e0e0;
+            border: 1px solid #999;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .btn-step:focus {
+            outline: var(--focus-outline);
+        }
+
+        .btn-step:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* EXERCISE 4: EDITABLE TABLE */
+        .table-responsive {
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+
+        .pa-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .pa-table th, .pa-table td {
+            border: 2px solid var(--border-color);
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        .pa-table th {
+            background-color: #f0f0f0;
+        }
+
+        .pa-table td input {
+            width: 100%;
+            max-width: 65px;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 1px solid #999;
+            border-radius: 6px;
+        }
+
+        .pa-table td input.cell-error {
+            border-color: var(--error-color);
+            background-color: var(--error-bg);
+        }
+
+        .pa-table td input.cell-correct {
+            border-color: var(--success-color);
+            background-color: var(--success-bg);
+        }
+
+        .pa-table td input:disabled {
+            color: #333;
+        }
+
+        /* EXERCISE 5: MATCHING BY BUTTONS */
+        .matching-section {
+            margin-bottom: 15px;
+        }
+
+        .match-group-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .match-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .match-card {
+            background: #ffffff;
+            border: 2px solid #b0bec5;
+            border-radius: 10px;
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .match-card:hover {
+            border-color: var(--primary-light);
+            background-color: #f4fbf4;
+        }
+
+        .match-card:focus {
+            outline: var(--focus-outline);
+        }
+
+        .match-card.selected {
+            border-color: var(--primary-color);
+            background-color: #e8f5e9;
+            box-shadow: 0 2px 6px rgba(46, 125, 50, 0.25);
+        }
+
+        .match-card-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #78909c;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .match-card.selected .match-card-indicator {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .match-card-text {
+            flex-grow: 1;
+            color: #212121;
+        }
+
+        .match-card.selected .match-card-text {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .match-card:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            background-color: #f5f5f5;
+        }
+
+        .pairs-list {
+            background: #fafafa;
+            border: 2px dashed #b0bec5;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-size: 0.88rem;
+        }
+
+        .pair-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 8px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        .pair-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .pair-item-sit {
+            font-size: 0.85rem;
+            color: #37474f;
+        }
+
+        .pair-item-form {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        /* FEEDBACK BOXES */
+        .feedback {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .feedback.error {
+            display: block;
+            background-color: var(--error-bg);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        .feedback.success {
+            display: block;
+            background-color: var(--success-bg);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .procedure-box {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f4f8;
+            border-left: 3px solid #0288d1;
+            font-size: 0.85rem;
+            color: #102a43;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* GENERAL SUMMARY SECTION */
+        #summary-card {
+            display: none;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .summary-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .summary-score {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .summary-message {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .summary-details {
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.88rem;
+        }
+
+        .status-tag {
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .status-tag.correct {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+        }
+
+        .status-tag.incorrect {
+            background-color: var(--error-bg);
+            color: var(--error-color);
+        }
+
+        .guided-example {
+            background-color: #fffde7;
+            border: 1px solid #ffe082;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        /* NAVIGATION & FOOTER */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        @media (min-width: 480px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- HEADER CURRICULAR -->
+    <header>
+        <h1>Matemática Interactiva</h1>
+        <div class="meta-info">
+            <div>Área: Matemática</div>
+            <div>Grado: 2.º de Secundaria</div>
+            <div style="grid-column: span 2;">Tema: Progresiones Aritméticas (Término n-ésimo y Suma)</div>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: bold; color: var(--primary-dark);">
+            Competencia: Resuelve problemas de regularidad, equivalencia y cambio
+        </div>
+
+        <div class="curricular-accordion">
+            <button class="accordion-btn" id="acc-btn" onclick="toggleAccordion()" aria-expanded="false" aria-controls="acc-content">
+                <span>Ver Capacidades y Desempeños CNEB</span>
+                <span id="acc-icon">▼</span>
+            </button>
+            <div class="accordion-content" id="acc-content">
+                <p><strong>Capacidades:</strong></p>
+                <ul style="padding-left: 15px; margin-bottom: 8px;">
+                    <li>Traduce datos y condiciones a expresiones algebraicas.</li>
+                    <li>Comunica su comprensión sobre las relaciones algebraicas.</li>
+                    <li>Usa estrategias y procedimientos para encontrar reglas generales.</li>
+                    <li>Argumenta afirmaciones sobre relaciones de cambio y equivalencia.</li>
+                </ul>
+                <p><strong>Desempeños precisados del CNEB:</strong></p>
+                <ol>
+                    <li>Establece relaciones entre datos y las transforma a reglas de formación de progresiones aritméticas con números enteros.</li>
+                    <li>Expresa con diversas representaciones (gráficas, tabulares, simbólicas) la regla de formación y la suma de sus términos.</li>
+                    <li>Selecciona y combina recursos o estrategias para determinar el término n-ésimo o la suma de n términos.</li>
+                    <li>Plantea y justifica afirmaciones sobre la regla de formación y el término n-ésimo, corrigiendo errores.</li>
+                </ol>
+            </div>
+        </div>
+    </header>
+
+    <!-- BANNER Y BARRA DE CONTROL MODO REVISIÓN -->
+    <div class="mode-banner" id="review-banner">
+        <div><strong>Modo de Revisión Activado</strong> (Respuestas bloqueadas en solo lectura)</div>
+        <div class="quick-nav" id="quick-nav-bar">
+            <button class="quick-nav-btn" onclick="jumpToCard(1)">Act 1</button>
+            <button class="quick-nav-btn" onclick="jumpToCard(2)">Act 2</button>
+            <button class="quick-nav-btn" onclick="jumpToCard(3)">Act 3</button>
+            <button class="quick-nav-btn" onclick="jumpToCard(4)">Act 4</button>
+            <button class="quick-nav-btn" onclick="jumpToCard(5)">Act 5</button>
+        </div>
+        <div class="review-actions-top">
+            <button class="btn btn-action" style="margin-top:5px; font-size:0.85rem; padding:8px;" onclick="exitReviewToSummary()">Volver al Resumen Final</button>
+            <button class="btn btn-restart" style="margin-top:5px; font-size:0.85rem; padding:8px;" onclick="initApp()">Reiniciar Práctica (Nuevos Datos)</button>
+        </div>
+    </div>
+
+    <!-- SCOREBOARD -->
+    <div class="scoreboard" aria-live="polite">
+        <span class="score-title">Puntaje acumulado:</span>
+        <span class="score-value" id="current-score">0 / 20 pts</span>
+    </div>
+
+    <!-- MAIN CONTENT AREA / EXERCISES -->
+    <main id="exercises-container">
+
+        <!-- EJERCICIO 1 -->
+        <section class="exercise-card active" id="card-1" aria-labelledby="ex1-title">
+            <div class="ex-header">
+                <span class="ex-title" id="ex1-title">Actividad 1: Selección de término n-ésimo</span>
+                <span class="ex-badge">4 Puntos</span>
+            </div>
+            <div class="context-box" id="ex1-context"></div>
+            <p class="instruction" id="ex1-question"></p>
+            
+            <div class="options-grid" id="ex1-options" role="radiogroup" aria-label="Opciones de respuesta"></div>
+
+            <button class="btn" id="ex1-check-btn" onclick="checkEx1()">Comprobar respuesta</button>
+            <div class="feedback" id="ex1-feedback" aria-live="polite"></div>
+        </section>
+
+        <!-- EJERCICIO 2 -->
+        <section class="exercise-card" id="card-2" aria-labelledby="ex2-title">
+            <div class="ex-header">
+                <span class="ex-title" id="ex2-title">Actividad 2: Cálculo numérico del término n-ésimo</span>
+                <span class="ex-badge">4 Puntos</span>
+            </div>
+            <div class="context-box" id="ex2-context"></div>
+            <p class="instruction" id="ex2-question"></p>
+
+            <label for="ex2-input" class="sr-only">Escribe tu respuesta numérica</label>
+            <input type="number" pattern="[0-9]*" inputmode="numeric" id="ex2-input" class="input-num" placeholder="Ingresa el valor numérico">
+
+            <button class="btn" id="ex2-check-btn" onclick="checkEx2()">Comprobar respuesta</button>
+            <div class="feedback" id="ex2-feedback" aria-live="polite"></div>
+        </section>
+
+        <!-- EJERCICIO 3 -->
+        <section class="exercise-card" id="card-3" aria-labelledby="ex3-title">
+            <div class="ex-header">
+                <span class="ex-title" id="ex3-title">Actividad 3: Ordenar pasos de la sumatoria</span>
+                <span class="ex-badge">4 Puntos</span>
+            </div>
+            <div class="context-box" id="ex3-context"></div>
+            <p class="instruction">Organiza los pasos para resolver la suma de los términos en el orden correcto usando los botones "Subir" y "Bajar":</p>
+
+            <div class="steps-container" id="ex3-steps-list"></div>
+
+            <button class="btn" id="ex3-check-btn" onclick="checkEx3()">Comprobar orden</button>
+            <div class="feedback" id="ex3-feedback" aria-live="polite"></div>
+        </section>
+
+        <!-- EJERCICIO 4 -->
+        <section class="exercise-card" id="card-4" aria-labelledby="ex4-title">
+            <div class="ex-header">
+                <span class="ex-title" id="ex4-title">Actividad 4: Tabla y cálculo de suma</span>
+                <span class="ex-badge">4 Puntos</span>
+            </div>
+            <div class="context-box" id="ex4-context"></div>
+            <p class="instruction">1. Completa los datos de la progresión en la tabla (solo valores enteros positivos):</p>
+
+            <div class="table-responsive">
+                <table class="pa-table">
+                    <thead>
+                        <tr>
+                            <th>Posición (n)</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Término (a_n)</strong></td>
+                            <td><input type="number" min="0" step="1" inputmode="numeric" id="ex4-t1" aria-label="Término posición 1" onkeydown="preventNegative(event)" oninput="sanitizeNonNegative(this)"></td>
+                            <td><input type="number" min="0" step="1" inputmode="numeric" id="ex4-t2" aria-label="Término posición 2" onkeydown="preventNegative(event)" oninput="sanitizeNonNegative(this)"></td>
+                            <td><input type="number" min="0" step="1" inputmode="numeric" id="ex4-t3" aria-label="Término posición 3" onkeydown="preventNegative(event)" oninput="sanitizeNonNegative(this)"></td>
+                            <td><input type="number" min="0" step="1" inputmode="numeric" id="ex4-t4" aria-label="Término posición 4" onkeydown="preventNegative(event)" oninput="sanitizeNonNegative(this)"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="instruction" id="ex4-sum-question">2. Calcula la suma total S_4 de estos 4 términos:</p>
+            <label for="ex4-sum-input" class="sr-only">Suma total</label>
+            <input type="number" min="0" step="1" pattern="[0-9]*" inputmode="numeric" id="ex4-sum-input" class="input-num" placeholder="Suma total (S_4)" onkeydown="preventNegative(event)" oninput="sanitizeNonNegative(this)">
+
+            <button class="btn" id="ex4-check-btn" onclick="checkEx4()">Comprobar respuestas</button>
+            <div class="feedback" id="ex4-feedback" aria-live="polite"></div>
+        </section>
+
+        <!-- EJERCICIO 5 -->
+        <section class="exercise-card" id="card-5" aria-labelledby="ex5-title">
+            <div class="ex-header">
+                <span class="ex-title" id="ex5-title">Actividad 5: Relacionar situaciones y modelos</span>
+                <span class="ex-badge">4 Puntos</span>
+            </div>
+            <p class="instruction">Selecciona una <strong>Situación</strong> y luego su correspondiente <strong>Expresión del término n-ésimo</strong>. Pulsa "Emparejar" para formar cada pareja.</p>
+
+            <div class="matching-section">
+                <div class="match-group-title">
+                    <span>📌</span> 1. Selecciona una Situación cotidiana del Valle del Mantaro:
+                </div>
+                <div class="match-options" id="ex5-situations"></div>
+
+                <div class="match-group-title">
+                    <span>📐</span> 2. Selecciona su Modelo matemático (a_n):
+                </div>
+                <div class="match-options" id="ex5-formulas"></div>
+            </div>
+
+            <button class="btn btn-action" id="ex5-pair-btn" onclick="pairEx5()" style="margin-bottom:12px;">Emparejar Seleccionados</button>
+
+            <div class="match-group-title">
+                <span>🔗</span> Parejas vinculadas:
+            </div>
+            <div class="pairs-list" id="ex5-pairs-container">
+                <em>No has emparejado ningún elemento aún.</em>
+            </div>
+
+            <button class="btn" id="ex5-check-btn" onclick="checkEx5()">Comprobar Relaciones</button>
+            <div class="feedback" id="ex5-feedback" aria-live="polite"></div>
+        </section>
+
+        <!-- NAVEGACIÓN ENTRE ACTIVIDADES -->
+        <nav class="nav-controls" aria-label="Navegación de actividades">
+            <button class="btn btn-secondary" id="prev-btn" onclick="navigate(-1)" disabled>Anterior</button>
+            <button class="btn btn-secondary" id="next-btn" onclick="navigate(1)" disabled>Siguiente</button>
+        </nav>
+    </main>
+
+    <!-- SUMMARY CARD (AL FINALIZAR) -->
+    <section id="summary-card" aria-labelledby="summary-title">
+        <div class="summary-header">
+            <h2 id="summary-title" style="color: var(--primary-dark);">Resultados de la Práctica</h2>
+            <div class="summary-score" id="final-score-text">0 / 20</div>
+            <p id="final-rating-label" style="font-weight: bold; margin-top:5px;"></p>
+        </div>
+
+        <div class="summary-message" id="summary-feedback-msg"></div>
+
+        <div class="summary-details" id="summary-details-list"></div>
+
+        <button class="btn btn-action" id="review-btn-final" onclick="enableReviewMode()" style="margin-bottom: 10px;">
+            Revisar ejercicios y respuestas
+        </button>
+        <button class="btn btn-restart" onclick="initApp()">
+            Reiniciar (Nuevos datos aleatorios)
+        </button>
+    </section>
+</div>
+
+<script>
+    // ESTADO GLOBAL DE LA APLICACIÓN
+    const state = {
+        currentCard: 1,
+        score: { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0 },
+        attempts: { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0 },
+        isFinished: { ex1: false, ex2: false, ex3: false, ex4: false, ex5: false },
+        reviewMode: false,
+        ex5SelectedSituation: null,
+        ex5SelectedFormula: null,
+        ex5UserPairs: [],
+        data: {}
+    };
+
+    // CONTROLES DE RESTRICCIÓN PARA NO PERMITIR VALORES NEGATIVOS
+    function preventNegative(e) {
+        if (e.key === '-' || e.key === 'e' || e.key === 'E' || e.key === '+') {
+            e.preventDefault();
+        }
+    }
+
+    function sanitizeNonNegative(input) {
+        if (input.value !== '' && (parseFloat(input.value) < 0 || isNaN(input.value))) {
+            input.value = 0;
+        }
+    }
+
+    // UTILITIES
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getRandomItem(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+
+    // BANCOS DE SITUACIONES CONTEXTUALIZADAS
+    const CONTEXT_BANKS = {
+        ex1: [
+            { lugar: "Cochas Chico", item: "mates burilados", verbo: "elabora" },
+            { lugar: "Hualhuas", item: "tapices de lana", verbo: "teje" },
+            { lugar: "San Jerónimo de Tunán", item: "joyas de filigrana de plata", verbo: "forja" },
+            { lugar: "Chupaca", item: "platos de zaramama", verbo: "prepara" },
+            { lugar: "Sicaya", item: "sombreros artesanales", verbo: "confecciona" }
+        ],
+        ex2: [
+            { origen: "Huancayo", destino: "Jauja", carga: "sacos de papa huayro" },
+            { origen: "Concepción", destino: "La Oroya", carga: "hormas de queso mantaro" },
+            { origen: "Chupaca", destino: "Huancayo", carga: "cajas de trucha de El Ingenio" },
+            { origen: "Jauja", destino: "Aco", carga: "cántaros de cerámica" }
+        ],
+        ex3: [
+            { feria: "Feria Dominical de Huancayo", vendedor: "la señora María", producto: "panes de Ocopa", d: 4 },
+            { feria: "Feria de San Jerónimo", vendedor: "el maestro artesano Don Juan", producto: "tallados en madera", d: 3 },
+            { feria: "Feria de Jauja", vendedor: "el comerciante Luis", producto: "trajes de Tunantada", d: 5 }
+        ],
+        ex4: [
+            { zona: "Valle del Mantaro (Mito)", cultivo: "alverjas verdes" },
+            { zona: "Sapallanga", cultivo: "maíz blanco" },
+            { zona: "Ingenio", cultivo: "alcachofas de exportación" },
+            { zona: "Chupuro", cultivo: "zanahorias orgánicas" }
+        ],
+        ex5Pool: [
+            { sit: "Un taller en Hualhuas empieza confeccionando a_1 tapices el primer mes e incrementa en d tapices cada mes siguiente." },
+            { sit: "En un criadero de El Ingenio se cosechan a_1 truchas el primer día y la cantidad aumenta en d truchas diariamente." },
+            { sit: "Un grupo de danzantes de Huaylarsh en Sapallanga ensaya a_1 minutos el primer día y aumenta d minutos cada jornada." },
+            { sit: "Un agricultor en Chupaca cosecha a_1 kg de quinua en la primera semana y suma d kg más en cada semana posterior." }
+        ]
+    };
+
+    function toggleAccordion() {
+        const content = document.getElementById('acc-content');
+        const btn = document.getElementById('acc-btn');
+        const icon = document.getElementById('acc-icon');
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+        
+        btn.setAttribute('aria-expanded', !isExpanded);
+        content.classList.toggle('show');
+        icon.textContent = isExpanded ? '▼' : '▲';
+    }
+
+    function updateScoreUI() {
+        const total = Object.values(state.score).reduce((a, b) => a + b, 0);
+        document.getElementById('current-score').textContent = `${total} / 20 pts`;
+    }
+
+    function updateNavState() {
+        const currentKey = `ex${state.currentCard}`;
+        const canAdvance = state.isFinished[currentKey] || state.reviewMode;
+
+        for(let i=1; i<=5; i++) {
+            const btn = document.querySelectorAll('.quick-nav-btn')[i-1];
+            if(btn) {
+                if(i === state.currentCard) {
+                    btn.classList.add('active-q');
+                } else {
+                    btn.classList.remove('active-q');
+                }
+            }
+        }
+
+        if (state.reviewMode) {
+            document.getElementById('prev-btn').disabled = (state.currentCard === 1);
+            document.getElementById('next-btn').disabled = (state.currentCard === 5);
+            document.getElementById('next-btn').textContent = (state.currentCard === 5) ? "Finalizado" : "Siguiente";
+        } else {
+            document.getElementById('prev-btn').disabled = true;
+            document.getElementById('next-btn').disabled = !canAdvance;
+            if (state.currentCard === 5) {
+                document.getElementById('next-btn').textContent = "Ver Resultados Finales";
+            } else {
+                document.getElementById('next-btn').textContent = "Siguiente";
+            }
+        }
+    }
+
+    function navigate(direction) {
+        document.getElementById(`card-${state.currentCard}`).classList.remove('active');
+        state.currentCard += direction;
+
+        if (state.currentCard > 5) {
+            if (state.reviewMode) {
+                exitReviewToSummary();
+            } else {
+                showSummary();
+            }
+            return;
+        }
+
+        document.getElementById(`card-${state.currentCard}`).classList.add('active');
+        updateNavState();
+    }
+
+    function jumpToCard(cardNum) {
+        document.getElementById(`card-${state.currentCard}`).classList.remove('active');
+        state.currentCard = cardNum;
+        document.getElementById(`card-${state.currentCard}`).classList.add('active');
+        updateNavState();
+    }
+
+    function generateData() {
+        // Ex 1
+        const e1_ctx = getRandomItem(CONTEXT_BANKS.ex1);
+        const e1_a1 = getRandomInt(4, 12);
+        const e1_d = getRandomInt(3, 7);
+        const e1_n = getRandomInt(6, 12);
+        const e1_ans = e1_a1 + (e1_n - 1) * e1_d;
+
+        const distractorSet = new Set();
+        distractorSet.add(e1_ans);
+        distractorSet.add(e1_a1 + e1_n * e1_d);
+        distractorSet.add(e1_ans - e1_d);
+        distractorSet.add(e1_ans + e1_d);
+        distractorSet.add((e1_n - 1) * e1_d);
+
+        let offset = 2;
+        while (distractorSet.size < 4) {
+            distractorSet.add(e1_ans + offset);
+            offset += 3;
+        }
+
+        const e1_opts = Array.from(distractorSet).slice(0, 4).sort(() => Math.random() - 0.5);
+
+        // Ex 2
+        const e2_ctx = getRandomItem(CONTEXT_BANKS.ex2);
+        const e2_a1 = getRandomInt(12, 30);
+        const e2_d = getRandomInt(4, 9);
+        const e2_n = getRandomInt(7, 15);
+        const e2_ans = e2_a1 + (e2_n - 1) * e2_d;
+
+        // Ex 3
+        const e3_ctx = getRandomItem(CONTEXT_BANKS.ex3);
+        const e3_a1 = getRandomInt(5, 16);
+        const e3_d = getRandomInt(2, 6);
+        const e3_n = getRandomInt(5, 9);
+        const e3_an = e3_a1 + (e3_n - 1) * e3_d;
+        const e3_sum = (e3_n * (e3_a1 + e3_an)) / 2;
+
+        // Ex 4
+        const e4_ctx = getRandomItem(CONTEXT_BANKS.ex4);
+        const e4_a1 = getRandomInt(4, 15);
+        const e4_d = getRandomInt(3, 8);
+        const e4_t = [e4_a1, e4_a1 + e4_d, e4_a1 + 2*e4_d, e4_a1 + 3*e4_d];
+        const e4_sum = e4_t.reduce((a,b)=>a+b, 0);
+
+        // Ex 5
+        const shuffledPool = [...CONTEXT_BANKS.ex5Pool].sort(() => Math.random() - 0.5).slice(0, 3);
+        const e5_items = shuffledPool.map((item, index) => {
+            const a1 = getRandomInt(5, 20);
+            const d = getRandomInt(3, 8);
+            return {
+                id: index + 1,
+                sit: item.sit.replace('a_1', a1).replace('d', d),
+                form: `a_n = ${a1} + (n - 1) × ${d}`,
+                a1: a1,
+                d: d
+            };
+        });
+
+        state.data = {
+            ex1: { ctx: e1_ctx, a1: e1_a1, d: e1_d, n: e1_n, ans: e1_ans, opts: e1_opts },
+            ex2: { ctx: e2_ctx, a1: e2_a1, d: e2_d, n: e2_n, ans: e2_ans },
+            ex3: { ctx: e3_ctx, a1: e3_a1, d: e3_d, n: e3_n, an: e3_an, sum: e3_sum },
+            ex4: { ctx: e4_ctx, a1: e4_a1, d: e4_d, terms: e4_t, sum: e4_sum },
+            ex5: e5_items
+        };
+    }
+
+    function initApp() {
+        generateData();
+        
+        state.currentCard = 1;
+        state.score = { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0 };
+        state.attempts = { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0 };
+        state.isFinished = { ex1: false, ex2: false, ex3: false, ex4: false, ex5: false };
+        state.reviewMode = false;
+        state.ex5SelectedSituation = null;
+        state.ex5SelectedFormula = null;
+        state.ex5UserPairs = [];
+
+        updateScoreUI();
+
+        document.getElementById('review-banner').style.display = 'none';
+        document.getElementById('summary-card').style.display = 'none';
+        document.getElementById('exercises-container').style.display = 'block';
+        
+        for(let i=1; i<=5; i++) {
+            const card = document.getElementById(`card-${i}`);
+            card.classList.remove('active', 'completed', 'failed-card');
+            const fb = document.getElementById(`ex${i}-feedback`);
+            fb.className = 'feedback';
+            fb.innerHTML = '';
+            document.getElementById(`ex${i}-check-btn`).disabled = false;
+        }
+
+        document.getElementById('card-1').classList.add('active');
+        updateNavState();
+
+        renderEx1();
+        renderEx2();
+        renderEx3();
+        renderEx4();
+        renderEx5();
+    }
+
+    // --- RENDER & CHECK EX 1 ---
+    function renderEx1() {
+        const d = state.data.ex1;
+        const ctx = document.getElementById('ex1-context');
+        ctx.innerHTML = `Un taller tradicional en <strong>${d.ctx.lugar}</strong> se dedica a la elaboración de ${d.ctx.item}. El primer día ${d.ctx.verbo} <strong>${d.a1}</strong> unidades, y en cada día posterior incrementan en <strong>${d.d}</strong> unidades su producción.`;
+        
+        document.getElementById('ex1-question').textContent = `¿Cuántas unidades de ${d.ctx.item} ${d.ctx.verbo} en el día ${d.n}? (Calcula el término n-ésimo a_${d.n})`;
+
+        const optionsGrid = document.getElementById('ex1-options');
+        optionsGrid.innerHTML = '';
+
+        d.opts.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = `${opt} unidades`;
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', 'false');
+            btn.onclick = () => {
+                if(state.isFinished.ex1) return;
+                document.querySelectorAll('#ex1-options .option-btn').forEach(b => {
+                    b.classList.remove('selected');
+                    b.setAttribute('aria-checked', 'false');
+                });
+                btn.classList.add('selected');
+                btn.setAttribute('aria-checked', 'true');
+                state.data.ex1.userSelected = opt;
+            };
+            optionsGrid.appendChild(btn);
+        });
+    }
+
+    function checkEx1() {
+        const fb = document.getElementById('ex1-feedback');
+        const sel = state.data.ex1.userSelected;
+        const d = state.data.ex1;
+
+        if (!sel) {
+            fb.className = 'feedback error';
+            fb.textContent = 'Selecciona una alternativa antes de comprobar.';
+            return;
+        }
+
+        state.attempts.ex1++;
+
+        if (sel === d.ans) {
+            state.score.ex1 = 4;
+            state.isFinished.ex1 = true;
+            updateScoreUI();
+            document.getElementById('card-1').classList.add('completed');
+            disableEx1();
+
+            fb.className = 'feedback success';
+            fb.innerHTML = `<strong>¡Excelente! Respuesta correcta.</strong>
+                <div class="procedure-box">
+                    <strong>Procedimiento completo para el término n-ésimo:</strong><br>
+                    • Término inicial (a_1) = ${d.a1}<br>
+                    • Diferencia o razón (d) = ${d.d}<br>
+                    • Posición (n) = ${d.n}<br>
+                    • Regla general: a_n = a_1 + (n - 1) × d<br>
+                    • Sustitución: a_${d.n} = ${d.a1} + (${d.n} - 1) × ${d.d} = ${d.a1} + ${d.n - 1} × ${d.d} = <strong>${d.ans}</strong> unidades.
+                </div>`;
+            updateNavState();
+        } else {
+            if (state.attempts.ex1 === 1) {
+                fb.className = 'feedback error';
+                let hint = `Pista: Para hallar el término n-ésimo de la posición ${d.n}, debes sumar la razón (${d.d}) un total de ${d.n - 1} veces al término inicial (${d.a1}). Te queda 1 intento adicional.`;
+                if (sel === d.a1 + d.n * d.d) {
+                    hint = `Pista: Multiplicaste la razón por ${d.n} directamente. Recuerda que la fórmula utiliza (n - 1), es decir (${d.n} - 1 = ${d.n - 1}). Reintenta seleccionando otra alternativa.`;
+                }
+                fb.innerHTML = `<strong>Respuesta incorrecta (Intento 1 de 2).</strong><br>${hint}`;
+            } else {
+                state.isFinished.ex1 = true;
+                document.getElementById('card-1').classList.add('failed-card');
+                disableEx1();
+
+                fb.className = 'feedback error';
+                fb.innerHTML = `<strong>Intento 2 incorrecto. Se han agotado los intentos.</strong>
+                    <div class="procedure-box">
+                        <strong>Solución correcta explicada:</strong><br>
+                        Se aplica la regla del término n-ésimo: a_n = a_1 + (n - 1) × d.<br>
+                        Para a_${d.n} = ${d.a1} + (${d.n} - 1) × ${d.d} = ${d.a1} + ${d.n - 1} × ${d.d} = <strong>${d.ans}</strong>.<br>
+                        La alternativa correcta era <strong>${d.ans} unidades</strong>.
+                    </div>`;
+                updateNavState();
+            }
+        }
+    }
+
+    function disableEx1() {
+        document.getElementById('ex1-check-btn').disabled = true;
+        document.querySelectorAll('#ex1-options .option-btn').forEach(b => b.disabled = true);
+    }
+
+    // --- RENDER & CHECK EX 2 ---
+    function renderEx2() {
+        const d = state.data.ex2;
+        const ctx = document.getElementById('ex2-context');
+        ctx.innerHTML = `Un camión de transporte desde <strong>${d.ctx.origen}</strong> hacia <strong>${d.ctx.destino}</strong> traslada ${d.ctx.carga}. Durante la primera hora transporta <strong>${d.a1} unidades</strong> y en cada hora siguiente incrementa la cantidad en <strong>${d.d} unidades</strong>.`;
+        
+        document.getElementById('ex2-question').textContent = `¿Cuántas unidades de ${d.ctx.carga} transportará exactamente en la hora número ${d.n}? Calcula el término n-ésimo a_${d.n}.`;
+        document.getElementById('ex2-input').value = '';
+        document.getElementById('ex2-input').disabled = false;
+    }
+
+    function checkEx2() {
+        const inputEl = document.getElementById('ex2-input');
+        const inputVal = parseInt(inputEl.value, 10);
+        const fb = document.getElementById('ex2-feedback');
+        const d = state.data.ex2;
+
+        if (isNaN(inputVal)) {
+            fb.className = 'feedback error';
+            fb.textContent = 'Ingresa un valor numérico antes de comprobar.';
+            return;
+        }
+
+        state.attempts.ex2++;
+
+        if (inputVal === d.ans) {
+            state.score.ex2 = 4;
+            state.isFinished.ex2 = true;
+            updateScoreUI();
+            document.getElementById('card-2').classList.add('completed');
+            disableEx2();
+
+            fb.className = 'feedback success';
+            fb.innerHTML = `<strong>¡Muy bien! Cálculo numérico correcto.</strong>
+                <div class="procedure-box">
+                    <strong>Procedimiento:</strong><br>
+                    • Término inicial a_1 = ${d.a1}, Razón d = ${d.d}, Posición n = ${d.n}.<br>
+                    • Diferencias a considerar: n - 1 = ${d.n - 1}.<br>
+                    • Cálculo: a_${d.n} = ${d.a1} + (${d.n - 1}) × ${d.d} = ${d.a1} + ${(d.n - 1) * d.d} = <strong>${d.ans}</strong> unidades.
+                </div>`;
+            updateNavState();
+        } else {
+            if (state.attempts.ex2 === 1) {
+                fb.className = 'feedback error';
+                const diffs = d.n - 1;
+                fb.innerHTML = `<strong>Respuesta incorrecta (Intento 1 de 2).</strong><br>Pista: Para calcular la hora ${d.n}, debes considerar sumar a_1 = ${d.a1} con exactamente <strong>${diffs} diferencias</strong> de incremento (es decir, (n - 1) × d = ${diffs} × ${d.d}). Revisa tu cálculo e inténtalo otra vez.`;
+            } else {
+                state.isFinished.ex2 = true;
+                document.getElementById('card-2').classList.add('failed-card');
+                disableEx2();
+
+                fb.className = 'feedback error';
+                fb.innerHTML = `<strong>Intento 2 incorrecto. Se han agotado los intentos.</strong>
+                    <div class="procedure-box">
+                        <strong>Procedimiento correcto:</strong><br>
+                        a_${d.n} = a_1 + (n - 1) × d = ${d.a1} + (${d.n - 1}) × ${d.d} = ${d.a1} + ${(d.n - 1) * d.d} = <strong>${d.ans}</strong>.<br>
+                        El valor esperado era <strong>${d.ans}</strong>.
+                    </div>`;
+                updateNavState();
+            }
+        }
+    }
+
+    function disableEx2() {
+        document.getElementById('ex2-check-btn').disabled = true;
+        document.getElementById('ex2-input').disabled = true;
+    }
+
+    // --- RENDER & CHECK EX 3 ---
+    function renderEx3() {
+        const d = state.data.ex3;
+        const ctx = document.getElementById('ex3-context');
+        ctx.innerHTML = `En la <strong>${d.ctx.feria}</strong>, ${d.ctx.vendedor} vende <strong>${d.a1} unidades</strong> de ${d.ctx.producto} el primer día y aumenta en <strong>${d.d} unidades</strong> por día. Al cabo de <strong>${d.n} días</strong>, la última cantidad vendida fue a_${d.n} = ${d.an}. Se requiere calcular la suma total vendida S_${d.n}.`;
+
+        const steps = [
+            { id: 1, text: `Identificar los datos conocidos del problema: a_1 = ${d.a1}, a_${d.n} = ${d.an}, y n = ${d.n}.` },
+            { id: 2, text: `Escribir la fórmula general para la suma de términos: S_n = [n × (a_1 + a_n)] / 2.` },
+            { id: 3, text: `Reemplazar los datos en la fórmula: S_${d.n} = [${d.n} × (${d.a1} + ${d.an})] / 2.` },
+            { id: 4, text: `Calcular la suma interna de los términos: ${d.a1} + ${d.an} = ${d.a1 + d.an}.` },
+            { id: 5, text: `Multiplicar por n y dividir entre 2 para obtener el total: S_${d.n} = ${d.sum} unidades.` }
+        ];
+
+        state.data.ex3.currentSteps = steps.sort(() => Math.random() - 0.5);
+        renderStepsList();
+    }
+
+    function renderStepsList() {
+        const container = document.getElementById('ex3-steps-list');
+        container.innerHTML = '';
+
+        state.data.ex3.currentSteps.forEach((step, index) => {
+            const item = document.createElement('div');
+            item.className = 'step-item';
+            item.id = `step-item-${index}`;
+
+            const text = document.createElement('div');
+            text.className = 'step-text';
+            text.innerHTML = `<strong>Paso ${index + 1}:</strong> ${step.text}`;
+
+            const controls = document.createElement('div');
+            controls.className = 'step-controls';
+
+            const btnUp = document.createElement('button');
+            btnUp.className = 'btn-step';
+            btnUp.textContent = '▲ Subir';
+            btnUp.setAttribute('aria-label', `Subir paso ${index + 1}`);
+            btnUp.disabled = (index === 0 || state.isFinished.ex3);
+            btnUp.onclick = () => moveStep(index, -1);
+
+            const btnDown = document.createElement('button');
+            btnDown.className = 'btn-step';
+            btnDown.textContent = '▼ Bajar';
+            btnDown.setAttribute('aria-label', `Bajar paso ${index + 1}`);
+            btnDown.disabled = (index === state.data.ex3.currentSteps.length - 1 || state.isFinished.ex3);
+            btnDown.onclick = () => moveStep(index, 1);
+
+            controls.appendChild(btnUp);
+            controls.appendChild(btnDown);
+
+            item.appendChild(text);
+            item.appendChild(controls);
+            container.appendChild(item);
+        });
+    }
+
+    function moveStep(index, direction) {
+        if(state.isFinished.ex3) return;
+        const steps = state.data.ex3.currentSteps;
+        const temp = steps[index];
+        steps[index] = steps[index + direction];
+        steps[index + direction] = temp;
+        renderStepsList();
+    }
+
+    function checkEx3() {
+        const steps = state.data.ex3.currentSteps;
+        const fb = document.getElementById('ex3-feedback');
+        let firstWrongIndex = -1;
+
+        for (let i = 0; i < steps.length; i++) {
+            if (steps[i].id !== i + 1) {
+                firstWrongIndex = i;
+                break;
+            }
+        }
+
+        state.attempts.ex3++;
+
+        if (firstWrongIndex === -1) {
+            state.score.ex3 = 4;
+            state.isFinished.ex3 = true;
+            updateScoreUI();
+            document.getElementById('card-3').classList.add('completed');
+            disableEx3();
+
+            fb.className = 'feedback success';
+            fb.innerHTML = `<strong>¡Excelente! Has ordenado la secuencia lógica de la sumatoria correctamente.</strong>
+                <div class="procedure-box">
+                    <strong>Secuencia correcta verificada:</strong><br>
+                    1. Identificar datos → 2. Plantear fórmula S_n → 3. Sustituir valores → 4. Operar paréntesis → 5. Resultado final.
+                </div>`;
+            updateNavState();
+        } else {
+            if (state.attempts.ex3 === 1) {
+                renderStepsList();
+                const wrongEl = document.getElementById(`step-item-${firstWrongIndex}`);
+                if (wrongEl) wrongEl.classList.add('error-step');
+
+                fb.className = 'feedback error';
+                fb.innerHTML = `<strong>Orden incorrecto (Intento 1 de 2).</strong><br>Pista: Revisa la ubicación marcada en rojo (Paso ${firstWrongIndex + 1}). Recuerda que primero se identifican los datos y la fórmula antes de realizar los cálculos numéricos. Te queda 1 intento.`;
+            } else {
+                state.isFinished.ex3 = true;
+                document.getElementById('card-3').classList.add('failed-card');
+                disableEx3();
+
+                state.data.ex3.currentSteps.sort((a,b) => a.id - b.id);
+                renderStepsList();
+
+                fb.className = 'feedback error';
+                fb.innerHTML = `<strong>Intento 2 incorrecto. Se han agotado los intentos.</strong>
+                    <div class="procedure-box">
+                        <strong>Orden correcto resuelto en pantalla:</strong><br>
+                        Se han reorganizado los pasos automáticamente para que analices la secuencia pedagógica correcta para calcular la sumatoria S_n.
+                    </div>`;
+                updateNavState();
+            }
+        }
+    }
+
+    function disableEx3() {
+        document.getElementById('ex3-check-btn').disabled = true;
+        document.querySelectorAll('.btn-step').forEach(b => b.disabled = true);
+    }
+
+    // --- RENDER & CHECK EX 4 ---
+    function renderEx4() {
+        const d = state.data.ex4;
+        const ctx = document.getElementById('ex4-context');
+        ctx.innerHTML = `Un grupo de agricultores de <strong>${d.ctx.zona}</strong> registra la cosecha diaria de ${d.ctx.cultivo}. La secuencia forma una progresión aritmética con término inicial a_1 = <strong>${d.a1}</strong> y razón constante d = <strong>${d.d}</strong>.`;
+
+        ['t1','t2','t3','t4'].forEach(id => {
+            const el = document.getElementById(`ex4-${id}`);
+            el.value = '';
+            el.disabled = false;
+            el.className = '';
+        });
+
+        const sumInput = document.getElementById('ex4-sum-input');
+        sumInput.value = '';
+        sumInput.disabled = false;
+    }
+
+    function checkEx4() {
+        const d = state.data.ex4;
+        const u_t1 = parseInt(document.getElementById('ex4-t1').value, 10);
+        const u_t2 = parseInt(document.getElementById('ex4-t2').value, 10);
+        const u_t3 = parseInt(document.getElementById('ex4-t3').value, 10);
+        const u_t4 = parseInt(document.getElementById('ex4-t4').value, 10);
+        const u_sum = parseInt(document.getElementById('ex4-sum-input').value, 10);
+
+        const fb = document.getElementById('ex4-feedback');
+        const userTerms = [u_t1, u_t2, u_t3, u_t4];
+        let tableCorrect = true;
+
+        userTerms.forEach((val, idx) => {
+            const inputEl = document.getElementById(`ex4-t${idx+1}`);
+            if (val === d.terms[idx]) {
+                inputEl.className = 'cell-correct';
+            } else {
+                inputEl.className = 'cell-error';
+                tableCorrect = false;
+            }
+        });
+
+        const sumCorrect = (u_sum === d.sum);
+
+        state.attempts.ex4++;
+
+        if (tableCorrect && sumCorrect) {
+            state.score.ex4 = 4;
+            state.isFinished.ex4 = true;
+            updateScoreUI();
+            document.getElementById('card-4').classList.add('completed');
+            disableEx4();
+
+            fb.className = 'feedback success';
+            fb.innerHTML = `<strong>¡Perfecto! Tabla y suma completadas correctamente.</strong>
+                <div class="procedure-box">
+                    <strong>Relación y comprobación:</strong><br>
+                    • Secuencia de la tabla: ${d.terms.join(', ')}.<br>
+                    • Suma calculada S_4 = ${d.terms.join(' + ')} = <strong>${d.sum}</strong>.<br>
+                    • Por fórmula: S_4 = [4 × (a_1 + a_4)] / 2 = [4 × (${d.a1} + ${d.terms[3]})] / 2 = 2 × ${d.a1 + d.terms[3]} = <strong>${d.sum}</strong>.
+                </div>`;
+            updateNavState();
+        } else {
+            if (state.attempts.ex4 === 1) {
+                fb.className = 'feedback error';
+                let hint = '';
+                if (!tableCorrect && !sumCorrect) {
+                    hint = `Revisa las celdas en rojo. Recuerda sumar la razón constante d = ${d.d} al término anterior. Luego suma los 4 términos para obtener S_4. Te queda 1 intento.`;
+                } else if (!tableCorrect) {
+                    hint = `La suma total ingresada está bien, pero hay valores incorrectos en la tabla (remarcados en rojo). Revisa sumando d = ${d.d}.`;
+                } else {
+                    hint = `Los 4 términos de la tabla son correctos, pero el resultado de la suma S_4 no es correcto. Suma: ${d.terms.join(' + ')}.`;
+                }
+                fb.innerHTML = `<strong>Respuesta con errores (Intento 1 de 2).</strong><br>Pista: ${hint}`;
+            } else {
+                state.isFinished.ex4 = true;
+                document.getElementById('card-4').classList.add('failed-card');
+                
+                userTerms.forEach((_, idx) => {
+                    const inputEl = document.getElementById(`ex4-t${idx+1}`);
+                    inputEl.value = d.terms[idx];
+                    inputEl.className = 'cell-correct';
+                });
+                document.getElementById('ex4-sum-input').value = d.sum;
+
+                disableEx4();
+
+                fb.className = 'feedback error';
+                fb.innerHTML = `<strong>Intento 2 incorrecto. Se han agotado los intentos.</strong>
+                    <div class="procedure-box">
+                        <strong>Solución correcta cargada en la tabla:</strong><br>
+                        • Términos: a_1=${d.terms[0]}, a_2=${d.terms[1]}, a_3=${d.terms[2]}, a_4=${d.terms[3]}.<br>
+                        • Suma total S_4 = ${d.terms.join(' + ')} = <strong>${d.sum}</strong>.
+                    </div>`;
+                updateNavState();
+            }
+        }
+    }
+
+    function disableEx4() {
+        document.getElementById('ex4-check-btn').disabled = true;
+        ['t1','t2','t3','t4'].forEach(id => {
+            document.getElementById(`ex4-${id}`).disabled = true;
+        });
+        document.getElementById('ex4-sum-input').disabled = true;
+    }
+
+    // --- RENDER & CHECK EX 5 ---
+    function renderEx5() {
+        const situationsContainer = document.getElementById('ex5-situations');
+        const formulasContainer = document.getElementById('ex5-formulas');
+        
+        situationsContainer.innerHTML = '';
+        formulasContainer.innerHTML = '';
+        document.getElementById('ex5-pairs-container').innerHTML = '<em>No has emparejado ningún elemento aún.</em>';
+        
+        state.ex5SelectedSituation = null;
+        state.ex5SelectedFormula = null;
+        state.ex5UserPairs = [];
+
+        const situations = state.data.ex5.map(item => ({ id: item.id, text: item.sit }));
+        const formulas = state.data.ex5.map(item => ({ id: item.id, text: item.form })).sort(() => Math.random() - 0.5);
+
+        situations.forEach(sit => {
+            const btn = document.createElement('button');
+            btn.className = 'match-card';
+            btn.setAttribute('type', 'button');
+            btn.innerHTML = `
+                <span class="match-card-indicator">✓</span>
+                <span class="match-card-text">${sit.text}</span>
+            `;
+            btn.onclick = () => {
+                if(state.isFinished.ex5) return;
+                document.querySelectorAll('#ex5-situations .match-card').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                state.ex5SelectedSituation = sit;
+            };
+            situationsContainer.appendChild(btn);
+        });
+
+        formulas.forEach(form => {
+            const btn = document.createElement('button');
+            btn.className = 'match-card';
+            btn.setAttribute('type', 'button');
+            btn.innerHTML = `
+                <span class="match-card-indicator">✓</span>
+                <span class="match-card-text">${form.text}</span>
+            `;
+            btn.onclick = () => {
+                if(state.isFinished.ex5) return;
+                document.querySelectorAll('#ex5-formulas .match-card').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                state.ex5SelectedFormula = form;
+            };
+            formulasContainer.appendChild(btn);
+        });
+    }
+
+    function pairEx5() {
+        if(state.isFinished.ex5) return;
+
+        const sit = state.ex5SelectedSituation;
+        const form = state.ex5SelectedFormula;
+
+        if (!sit || !form) {
+            const fb = document.getElementById('ex5-feedback');
+            fb.className = 'feedback error';
+            fb.textContent = 'Selecciona una Situación y una Expresión antes de pulsar "Emparejar".';
+            return;
+        }
+
+        state.ex5UserPairs = state.ex5UserPairs.filter(p => p.sit.id !== sit.id);
+        state.ex5UserPairs.push({ sit, form });
+
+        const container = document.getElementById('ex5-pairs-container');
+        container.innerHTML = '';
+        state.ex5UserPairs.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'pair-item';
+            div.innerHTML = `
+                <div class="pair-item-sit"><strong>Situación:</strong> ${p.sit.text}</div>
+                <div class="pair-item-form"><strong>Modelo asignado:</strong> ${p.form.text}</div>
+            `;
+            container.appendChild(div);
+        });
+
+        document.getElementById('ex5-feedback').className = 'feedback';
+    }
+
+    function checkEx5() {
+        const fb = document.getElementById('ex5-feedback');
+        
+        if (state.ex5UserPairs.length < 3) {
+            fb.className = 'feedback error';
+            fb.textContent = 'Debes emparejar las 3 situaciones con sus correspondientes fórmulas antes de comprobar.';
+            return;
+        }
+
+        state.attempts.ex5++;
+
+        let correctCount = 0;
+        state.ex5UserPairs.forEach(pair => {
+            if (pair.sit.id === pair.form.id) {
+                correctCount++;
+            }
+        });
+
+        if (correctCount === 3) {
+            state.score.ex5 = 4;
+            state.isFinished.ex5 = true;
+            updateScoreUI();
+            document.getElementById('card-5').classList.add('completed');
+            disableEx5();
+
+            fb.className = 'feedback success';
+            fb.innerHTML = `<strong>¡Excelente! Relaciones de modelos establecidas correctamente.</strong>
+                <div class="procedure-box">
+                    <strong>Explicación del modelo a_n = a_1 + (n - 1) × d:</strong><br>
+                    • El valor del primer término representa el punto de partida a_1.<br>
+                    • El incremento diario o mensual constante representa la razón o diferencia d.
+                </div>`;
+            updateNavState();
+        } else {
+            if (state.attempts.ex5 === 1) {
+                fb.className = 'feedback error';
+                fb.innerHTML = `<strong>Tienes parejas incorrectas (Intento 1 de 2).</strong><br>Pista: Identifica cuidadosamente cuál es el valor inicial a_1 (primer día) y la razón d (incremento constante) en el enunciado de cada situación. Vuelve a emparejar y reintenta.`;
+            } else {
+                state.isFinished.ex5 = true;
+                document.getElementById('card-5').classList.add('failed-card');
+                
+                const container = document.getElementById('ex5-pairs-container');
+                container.innerHTML = '';
+                state.data.ex5.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'pair-item';
+                    div.innerHTML = `
+                        <div class="pair-item-sit"><strong>Situación:</strong> ${item.sit}</div>
+                        <div class="pair-item-form" style="color:var(--success-color);"><strong>Modelo correcto:</strong> ${item.form}</div>
+                    `;
+                    container.appendChild(div);
+                });
+
+                disableEx5();
+
+                fb.className = 'feedback error';
+                fb.innerHTML = `<strong>Intento 2 incorrecto. Se han agotado los intentos.</strong>
+                    <div class="procedure-box">
+                        <strong>Relaciones correctas mostradas arriba:</strong><br>
+                        Recuerda que la expresión general a_n = a_1 + (n - 1) × d siempre mantiene a_1 como término de origen y d como razón de cambio.
+                    </div>`;
+                updateNavState();
+            }
+        }
+    }
+
+    function disableEx5() {
+        document.getElementById('ex5-check-btn').disabled = true;
+        document.getElementById('ex5-pair-btn').disabled = true;
+        document.querySelectorAll('#ex5-situations .match-card').forEach(b => b.disabled = true);
+        document.querySelectorAll('#ex5-formulas .match-card').forEach(b => b.disabled = true);
+    }
+
+    // --- RESUMEN FINAL Y RETROALIMENTACIÓN GENERAL ---
+    function showSummary() {
+        document.getElementById('exercises-container').style.display = 'none';
+        const summaryCard = document.getElementById('summary-card');
+        summaryCard.style.display = 'block';
+
+        const totalScore = Object.values(state.score).reduce((a,b)=>a+b, 0);
+        const correctCount = Object.values(state.score).filter(s => s === 4).length;
+
+        document.getElementById('final-score-text').textContent = `${totalScore} / 20 pts`;
+        
+        const ratingLabel = document.getElementById('final-rating-label');
+        const msgBox = document.getElementById('summary-feedback-msg');
+        const detailsList = document.getElementById('summary-details-list');
+
+        detailsList.innerHTML = '';
+
+        const names = [
+            "Actividad 1: Selección de término n-ésimo",
+            "Actividad 2: Cálculo numérico del término n-ésimo",
+            "Actividad 3: Ordenar pasos de la sumatoria",
+            "Actividad 4: Tabla y suma de términos",
+            "Actividad 5: Relacionar situaciones y modelos"
+        ];
+
+        for(let i=1; i<=5; i++) {
+            const isOk = state.score[`ex${i}`] === 4;
+            const item = document.createElement('div');
+            item.className = 'detail-item';
+            item.innerHTML = `
+                <span>${names[i-1]}</span>
+                <span class="status-tag ${isOk ? 'correct' : 'incorrect'}">
+                    ${isOk ? 'Correcto (4 pts)' : 'Incorrecto (0 pts)'}
+                </span>
+            `;
+            detailsList.appendChild(item);
+        }
+
+        const reviewBtn = document.getElementById('review-btn-final');
+        if (correctCount === 5) {
+            reviewBtn.textContent = "Revisar ejercicios resueltos";
+        } else {
+            reviewBtn.textContent = "Revisar ejercicios y respuestas incorrectas";
+        }
+
+        if (correctCount === 5) {
+            ratingLabel.textContent = "Nivel: Logro Destacado (20 puntos)";
+            ratingLabel.style.color = "var(--success-color)";
+            msgBox.innerHTML = `
+                <strong>¡Felicitaciones! Has obtenido un puntaje perfecto. 🎉</strong><br>
+                Demostraste una excelente comprensión de las progresiones aritméticas aplicadas a las actividades del Valle del Mantaro. Dominas con precisión tanto la regla del término n-ésimo (a_n = a_1 + (n-1)d) como el cálculo de la suma de términos (S_n). ¡Sigue así!
+            `;
+        } else if (correctCount === 4) {
+            ratingLabel.textContent = "Nivel: Logro Esperado (16 puntos)";
+            ratingLabel.style.color = "var(--primary-color)";
+            
+            const failedIdx = [1,2,3,4,5].find(i => state.score[`ex${i}`] < 4);
+            let specificFeedback = "";
+
+            if (failedIdx === 1 || failedIdx === 2) {
+                specificFeedback = "El cálculo del término n-ésimo. Recuerda que la razón d se multiplica por (n - 1) y no por n directamente.";
+            } else if (failedIdx === 3 || failedIdx === 4) {
+                specificFeedback = "El procedimiento de la sumatoria S_n. Recuerda sumar el primer término (a_1) con el último (a_n) antes de multiplicar por la cantidad de términos n y dividir entre 2.";
+            } else {
+                specificFeedback = "La identificación de modelos algebraicos. Ten presente que en a_n = a_1 + (n-1)d, el valor a_1 representa la cantidad inicial y d el incremento constante.";
+            }
+
+            msgBox.innerHTML = `
+                <strong>¡Muy buen trabajo! Has alcanzado un desempeño destacado.</strong><br>
+                Solo tuviste inconvenientes en la <strong>Actividad ${failedIdx}</strong>.<br>
+                <strong>Concepto a reforzar:</strong> Revisa ${specificFeedback} Puedes pulsar el botón de revisión para analizar la solución detallada.
+            `;
+        } else if (correctCount === 2 || correctCount === 3) {
+            ratingLabel.textContent = "Nivel: En Proceso (8 - 12 puntos)";
+            ratingLabel.style.color = "var(--accent-color)";
+            
+            const failedList = [1,2,3,4,5].filter(i => state.score[`ex${i}`] < 4);
+            let failedExplanations = "<ul style='padding-left:18px; margin-top:8px;'>";
+            
+            failedList.forEach(idx => {
+                if(idx === 1 || idx === 2) {
+                    failedExplanations += `<li><strong>Actividad ${idx} (Término n-ésimo):</strong> Para hallar a_n debes aplicar la fórmula a_n = a_1 + (n - 1) × d. No olvides restar 1 a la posición n.</li>`;
+                } else if(idx === 3 || idx === 4) {
+                    failedExplanations += `<li><strong>Actividad ${idx} (Sumatoria S_n):</strong> Para sumar n términos utiliza S_n = [n × (a_1 + a_n)] / 2. Es importante calcular primero a_1 y a_n correctamente.</li>`;
+                } else {
+                    failedExplanations += `<li><strong>Actividad ${idx} (Relación de modelos):</strong> Identifica claramente en el texto cuál es la cantidad de inicio (a_1) y el patrón de cambio constante (d).</li>`;
+                }
+            });
+            failedExplanations += "</ul>";
+
+            msgBox.innerHTML = `
+                <strong>Te encuentras en proceso de consolidación de tus aprendizajes.</strong><br>
+                Presentaste dificultades en las actividades: <strong>${failedList.join(', ')}</strong>.
+                ${failedExplanations}
+                <p style="margin-top:8px;">Pulsa en "Revisar ejercicios y respuestas" para analizar los detalles o en "Reiniciar" para realizar una nueva práctica con datos frescos.</p>
+            `;
+        } else {
+            ratingLabel.textContent = "Nivel: En Inicio (0 - 4 puntos)";
+            ratingLabel.style.color = "var(--error-color)";
+            
+            msgBox.innerHTML = `
+                <strong>Se requiere repasar las fórmulas fundamentales.</strong><br>
+                Revisa la siguiente guía básica antes de volver a intentarlo:
+                <div class="guided-example">
+                    <strong>Resumen de Fórmulas Clave:</strong><br>
+                    1. <strong>Término n-ésimo:</strong> a_n = a_1 + (n - 1) × d<br>
+                       • a_1: primer término | d: diferencia constante | n: posición del término.<br><br>
+                    2. <strong>Suma de n términos:</strong> S_n = [n × (a_1 + a_n)] / 2<br>
+                       • Suma el primer término (a_1) con el término final (a_n), multiplica por la cantidad de términos (n) y divide todo entre 2.<br><br>
+                    <strong>Ejemplo Guiado:</strong><br>
+                    Si a_1 = 5, d = 3 y n = 4:<br>
+                    • a_4 = 5 + (4 - 1) × 3 = 5 + 3 × 3 = 14.<br>
+                    • S_4 = [4 × (5 + 14)] / 2 = [4 × 19] / 2 = 38.
+                </div>
+            `;
+        }
+    }
+
+    function enableReviewMode() {
+        state.reviewMode = true;
+        document.getElementById('summary-card').style.display = 'none';
+        document.getElementById('exercises-container').style.display = 'block';
+        document.getElementById('review-banner').style.display = 'block';
+
+        state.currentCard = 1;
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById(`card-${i}`).classList.remove('active');
+        }
+        document.getElementById('card-1').classList.add('active');
+        updateNavState();
+    }
+
+    function exitReviewToSummary() {
+        document.getElementById('review-banner').style.display = 'none';
+        showSummary();
+    }
+
+    window.onload = function() {
+        initApp();
+    };
+</script>
+</body>
+</html>
